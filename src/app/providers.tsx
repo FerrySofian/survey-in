@@ -69,7 +69,7 @@ export default function Providers({
             }
           } catch (error) {
             console.log(error);
-            // location.reload();
+            location.reload();
           } finally {
             setRedirecting(false);
           }
