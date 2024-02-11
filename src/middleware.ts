@@ -19,7 +19,7 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(`${origin}/unauthorized`);
     }
   } else {
-    return NextResponse.redirect(`${origin}/register`);
+    return NextResponse.redirect(`${origin}/login`);
   }
 
   // If the current path doesn't match any redirection rule, continue to the next route

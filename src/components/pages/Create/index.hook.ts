@@ -43,9 +43,9 @@ export default function useCreate() {
 
   const sendEmail = async () => {
     try {
-      // const result = await googleFormsToJson(submittedUrl);
+      const result = await googleFormsToJson(submittedUrl);
 
-      // setFormTitle(result.title);
+      setFormTitle(result.title);
 
       setTabIndex(1);
     } catch (error) {

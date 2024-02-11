@@ -7,7 +7,7 @@ import {
   FacebookAuthProvider,
   updateProfile,
 } from "firebase/auth";
-import { putUserUpdate } from "@/services/user";
+import { putUserUpdate, getUserDetail } from "@/services/user";
 import { formatPhoneNumber } from "@/utils/helper";
 
 export async function googleSignIn() {
@@ -18,15 +18,17 @@ export async function googleSignIn() {
       updateProfile(userCredential.user, {
         displayName: userCredential?.user?.displayName,
       });
-      putUserUpdate(
-        {
-          role: "admin",
-          phone_number: formatPhoneNumber(
-            userCredential?.user?.phoneNumber ?? ""
-          ),
-        },
-        userCredential.user.uid
-      );
+      getUserDetail(userCredential.user.uid).catch((error) => {
+        putUserUpdate(
+          {
+            role: "admin",
+            phone_number: formatPhoneNumber(
+              userCredential?.user?.phoneNumber ?? ""
+            ),
+          },
+          userCredential.user.uid
+        );
+      });
     })
     .catch((error) => {
       // Handle Errors here.
