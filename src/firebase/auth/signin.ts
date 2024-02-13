@@ -14,7 +14,6 @@ export async function googleSignIn() {
   const googleProvider = new GoogleAuthProvider();
   signInWithPopup(auth, googleProvider)
     .then((userCredential) => {
-      console.log({ userCredential });
       updateProfile(userCredential.user, {
         displayName: userCredential?.user?.displayName,
       });

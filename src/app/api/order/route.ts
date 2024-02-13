@@ -80,16 +80,7 @@ export async function POST(
       created_by: userId,
     });
 
-    // console.log(questionnaireData.id);
-
-    // const blob = await fetch(payload.file.blobUrl).then((r) => r.blob());
     const base64String = await payload.file;
-
-    // console.log({ base64String });
-
-    // const uintToUpload = convertDataURIToBinary(base64String);
-
-    // console.log(uintToUpload);
 
     const storageRef = ref(storage, questionnaireData.id);
 

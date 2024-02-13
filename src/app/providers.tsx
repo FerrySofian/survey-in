@@ -46,10 +46,8 @@ export default function Providers({
     } else {
       const unsubscribe = onAuthStateChanged(auth, async (user) => {
         if (user) {
-          console.log("executed");
           try {
             const userDetail = await getUserDetail(user.uid);
-            console.log({ userDetail });
             if (!!userDetail) {
               const signedId = user.uid;
               Cookies.set("signed-id", signedId, { expires: 99 });

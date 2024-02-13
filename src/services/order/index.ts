@@ -1,5 +1,10 @@
 import { callAPI } from "@/services/api";
-import { OrderResponseUI, OrderUI, OrderPostUI, OrderDetailUI } from "../../types/order";
+import {
+  OrderResponseUI,
+  OrderUI,
+  OrderPostUI,
+  OrderDetailUI,
+} from "../../types/order";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 // USERS
@@ -21,7 +26,6 @@ export const getOrderDetail = async (questionnaireId: string) => {
     method: "GET",
   });
 
-  console.log(res.data);
   return res.data;
 };
 

@@ -4,10 +4,8 @@ import emailjs from "@emailjs/browser";
 
 import { FormValue, ProcessEnvConstants } from "./index.types";
 
-import { googleFormsToJson } from "react-google-forms-hooks";
-
 import { RespondentPostUI } from "@/types/questionnaire";
-import { postQuestionnaire } from "@/services/questionnaire";
+import { postQuestionnaire, getGoogleFormTitle } from "@/services/questionnaire";
 
 import { useAuthStore } from "@/stores/auth";
 
@@ -43,9 +41,9 @@ export default function useCreate() {
 
   const sendEmail = async () => {
     try {
-      const result = await googleFormsToJson(submittedUrl);
+      const result = await getGoogleFormTitle(submittedUrl);
 
-      setFormTitle(result.title);
+      setFormTitle(result.data.title);
 
       setTabIndex(1);
     } catch (error) {
@@ -65,7 +63,6 @@ export default function useCreate() {
         created_by_name: currentUser?.displayName,
       };
 
-      console.log(currentUser?.uid);
       const result = await postQuestionnaire(payload, currentUser?.uid);
       router.push(
         `/questionnaire/${result.data.data.id}${

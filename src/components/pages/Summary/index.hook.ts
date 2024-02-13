@@ -45,13 +45,11 @@ export default function useSummary({
       }
 
       // Do something with the files
-      console.log(file);
       const imgUrl = URL.createObjectURL(file);
       setBlobUrl(imgUrl);
       await toDataURL(imgUrl, (img) => {
         setValue("file", img);
       });
-      // console.log(file.name.split(".").pop());
     },
     [setValue]
   );
@@ -59,7 +57,6 @@ export default function useSummary({
   const onDropRejected = useCallback(
     async (fileRejections: any) => {
       fileRejections.forEach((val: any) => {
-        console.log(val);
         toast({
           title: `File size is ${convertSize(val.file.size)}.`,
           description: `The maximum size is 800kb`,

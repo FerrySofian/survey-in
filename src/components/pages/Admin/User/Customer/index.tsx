@@ -56,7 +56,6 @@ export function CustomerModalComponent({
 
   useEffect(() => {
     if (!!selectedData) {
-      console.log(selectedData);
       setValue("email", selectedData.email);
       setValue("full_name", selectedData.displayName);
       setValue("phone_number", selectedData.phone_number);

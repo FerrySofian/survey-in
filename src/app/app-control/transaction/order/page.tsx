@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   Table,
   Thead,
@@ -20,15 +20,24 @@ import {
   Input,
   Select,
   Button,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  IconButton,
+  useToast,
 } from "@chakra-ui/react";
 
-import { SearchIcon } from "@chakra-ui/icons";
+import { SearchIcon, ChevronDownIcon } from "@chakra-ui/icons";
 
 import DatePicker from "react-datepicker";
 
 import { useRouter } from "next/navigation";
 
-import { useQuestionnaireList } from "@/services/questionnaire";
+import {
+  useQuestionnaireList,
+  putQuestionnaireUpdateStatus,
+} from "@/services/questionnaire";
 import { currencyFormat, resolveStatusColor } from "@/utils/helper";
 import dayjs from "dayjs";
 import { useDebounce } from "use-debounce";
@@ -39,14 +48,43 @@ import "react-datepicker/dist/react-datepicker-cssmodules.css";
 import { ExampleCustomInput } from "@/components/fragments/Datepicker";
 import date from "@/components/fragments/Datepicker/_assets/date.svg";
 import Image from "next/image";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function TransactionOrderPage() {
   const { push } = useRouter();
+  const toast = useToast();
+  const queryClient = useQueryClient();
   const [search, setSearch] = useState<string>("");
   const [status, setStatus] = useState<string>("");
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [debouncedSearch] = useDebounce(search, 500);
+
+  const availableStatus = useMemo(() => {
+    return ["on-going", "in review", "cancelled", "draft", "done"];
+  }, []);
+
+  const handleChangeStatus = async (id: string, status: string) => {
+    try {
+      await putQuestionnaireUpdateStatus({ status }, id);
+      queryClient.invalidateQueries(["questionnaire"]);
+      toast({
+        title: `Success`,
+        description: "Questionnaire Status updated successfully",
+        status: "success",
+        position: "top",
+        isClosable: true,
+      });
+    } catch (error) {
+      toast({
+        title: `Failed`,
+        description: "Questionnaire status failed to update",
+        status: "error",
+        position: "top",
+        isClosable: true,
+      });
+    }
+  };
 
   const handleSearchChange = (event: any) => {
     setSearch(event.target.value);
@@ -140,14 +178,43 @@ export default function TransactionOrderPage() {
                   {currencyFormat(val?.questionnaire_total_price)}
                 </Td>
                 <Td>
-                  <Text
-                    fontSize="md"
-                    color={resolveStatusColor(val?.status)}
-                    textTransform="capitalize"
-                    fontWeight={500}
-                  >
-                    {val?.status}
-                  </Text>
+                  <Flex justifyContent="center" alignItems="center" gap="24px">
+                    <Text
+                      fontSize="md"
+                      color={resolveStatusColor(val?.status)}
+                      textTransform="capitalize"
+                      fontWeight={500}
+                    >
+                      {val?.status}
+                    </Text>
+                    <Menu>
+                      <MenuButton
+                        as={IconButton}
+                        aria-label="Options"
+                        icon={<ChevronDownIcon />}
+                        variant="outline"
+                      />
+                      <MenuList>
+                        {availableStatus.map((status, idx) => (
+                          <MenuItem
+                            key={idx}
+                            onClick={() => {
+                              handleChangeStatus(val.id, status);
+                            }}
+                          >
+                            <Text
+                              fontSize="md"
+                              color={resolveStatusColor(status)}
+                              textTransform="capitalize"
+                              fontWeight={500}
+                            >
+                              {status}
+                            </Text>
+                          </MenuItem>
+                        ))}
+                      </MenuList>
+                    </Menu>
+                  </Flex>
                 </Td>
                 <Td textAlign="center">
                   <Button
@@ -157,7 +224,7 @@ export default function TransactionOrderPage() {
                     fontSize={16}
                     borderRadius={34}
                     onClick={() => {
-                      push(`/admin/transaction/order/${val.id}`);
+                      push(`/app-control/transaction/order/${val.id}`);
                     }}
                   >
                     View

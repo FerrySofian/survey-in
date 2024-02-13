@@ -61,7 +61,7 @@ export const constructRespondentRequirementsValue = ({
   value: Array<string | number>;
   divider?: string;
 }) => {
-  if (key === "Age") return `${value[0]} - ${value[0]}`;
+  if (key === "Age") return `${value[0]} - ${value[1]}`;
   else return value.map((val) => title(val as string)).join(divider ?? ", ");
 };
 

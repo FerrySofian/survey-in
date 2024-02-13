@@ -56,11 +56,24 @@ export const postQuestionnaire = async (data: any, userId: any) => {
   });
 };
 
-export const deleteCalonSiswa = async ({ id }: { id: string | undefined }) => {
+export const putQuestionnaireUpdateStatus = async (
+  data: any,
+  questionnaireId: any
+) => {
   return await callAPI({
-    path: `/user/customer-coordinator/remove-user/${id}`,
-    method: "DELETE",
+    path: `/questionnaire/${questionnaireId}/status`,
+    method: "PUT",
+    data: data,
   });
+};
+
+export const getGoogleFormTitle = async (googleFormUrl: string) => {
+  const res = await callAPI({
+    path: `/get-google-form-title?url=${googleFormUrl}`,
+    method: "GET",
+  });
+
+  return res.data;
 };
 
 export const useQuestionnaireList = ({
@@ -97,9 +110,3 @@ export const useQuestionnaireDetail = (questionnaireId: string) => {
 //         const res = await putCalonSiswaUpdate(body as UserCustomerPutUI, id)
 //         return res;
 //     });
-
-export const useRemoveCalonSiswaQuery = () =>
-  useMutation(["calon-siswa"], async (body: { id: string | undefined }) => {
-    const res = await deleteCalonSiswa(body);
-    return res;
-  });

@@ -85,6 +85,7 @@ export default function HomeComponent() {
                   left: 0,
                 }}
                 controls
+                autoPlay
               >
                 <source src="/static/videos/Tutorial Surveyin.mp4" type="video/mp4" />
                 Your browser does not support the video tag.

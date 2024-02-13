@@ -55,7 +55,7 @@ export default function RespondentDetailBasicComponent({
       <NeedsCard title={"Age"}>
         <Flex justifyContent="space-between" w="100%" direction="column">
           <Text>
-            Between {range[0]} and {range[1]}
+            Between {watch('segmented_basic_detail.age.0') ?? 0} and {watch('segmented_basic_detail.age.1') ?? 0}
           </Text>
         </Flex>
         <RangeSlider

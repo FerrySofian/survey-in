@@ -20,14 +20,11 @@ import { useLocationList } from "@/services/location";
 
 export default function RespondentDetailBasicComponent() {
   const [show, setShow] = useState(false);
-  const [range, setRange] = useState<number[]>([19, 25]);
 
   const { isLoading: isLoadingReligion, data: religionList } =
     useReligionList();
   const { isLoading: isLoadingLocation, data: locationList } =
     useLocationList();
-
-  const handleToggle = () => setShow(!show);
 
   return (
     <Flex direction="column" gap="23px">
